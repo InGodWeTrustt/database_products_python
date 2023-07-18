@@ -1,6 +1,7 @@
 import sqlite3
 import os
 
+
 class Database:
     _instance = None
 
@@ -18,7 +19,7 @@ class Database:
         self.cursor = self.connection.cursor()
         self.create_start_table()
         return self
- 
+
     def create_start_table(self):
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS products (
@@ -38,20 +39,20 @@ class Database:
         self.connection.commit()
         print(f'Продукт "{product[1]}" был успешно добавлен в БД')
 
-    # def update(self, id):
-    #     cursor.execute(f"""
-    #         UPDATE products 
-    #         SET name= ?, category = ?, price = ?
-    #         WHERE id={id}
-    #     """, ((self.name, self.category, self.price)))
+    def update(self, id, product):
+        self.cursor.execute(f"""
+            UPDATE products 
+            SET date = ? , name= ?, category = ?, price = ?
+            WHERE id={id}
+        """, product)
 
-    #     conn.commit()
-    #     conn.close()
+        self.connection.commit()
+        self.cursor.close()
 
     def get_all_products(self):
         self.cursor.execute("""SELECT * FROM products""")
         return self.cursor.fetchall()
-    
+
     def destroy(self):
         self.cursor.close()
 

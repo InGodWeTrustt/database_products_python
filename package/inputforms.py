@@ -3,7 +3,6 @@ import datetime
 from package.opt_menu import OptMenu as OptionMenu
 from package.product import Product
 
-
 class InputForms:
     def __init__(self, root, cur_date):
         self.master = root
