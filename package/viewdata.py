@@ -15,12 +15,19 @@ class ViewData(ttk.Treeview):
         for named in kw.get('columns'):
             self.heading(named, text=named)
 
-        self.grid(rows=0, column=1)
+        self.grid(row=0, column=1)
+        # self.finally_price_lbl = tk.Label(root, text=f"Итоговая сумма: {str(finally_price)} р.", font=(
+        #         "Arial", 25))
+        # self.finally_price_lbl.grid(column=1, row=7)
 
     def render(self, data):
+        self.clear_all()
         for val in data:
             self.insert('', tk.END, values=val)
 
+    def clear_all(self):
+        for item in self.get_children():
+            self.delete(item)
 
 if __name__ == "__main__":
     app = tk.Tk()

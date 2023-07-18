@@ -17,6 +17,7 @@ class Database:
         self.connection = sqlite3.connect(db_file)
         self.cursor = self.connection.cursor()
         self.create_start_table()
+        return self
  
     def create_start_table(self):
         self.cursor.execute("""
@@ -28,27 +29,24 @@ class Database:
                 category TEXT
 );""")
 
-    def add_product(self, date, name, price, category):
+    def add_product(self, product):
         self.cursor.execute("""
             INSERT INTO products (date, name, price, category)
             VALUES (?, ?, ?, ?)
-        """, (date, name, price, category))
+        """, product)
 
         self.connection.commit()
-        print(f'Продукт "{name}" был успешно добавлен в БД')
+        print(f'Продукт "{product[1]}" был успешно добавлен в БД')
 
-    def update(self, id):
-        conn = sqlite3.connect(Product.path_to_db)
-        cursor = conn.cursor()
+    # def update(self, id):
+    #     cursor.execute(f"""
+    #         UPDATE products 
+    #         SET name= ?, category = ?, price = ?
+    #         WHERE id={id}
+    #     """, ((self.name, self.category, self.price)))
 
-        cursor.execute(f"""
-            UPDATE products 
-            SET name= ?, category = ?, price = ?
-            WHERE id={id}
-        """, ((self.name, self.category, self.price)))
-
-        conn.commit()
-        conn.close()
+    #     conn.commit()
+    #     conn.close()
 
     def get_all_products(self):
         self.cursor.execute("""SELECT * FROM products""")

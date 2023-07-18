@@ -28,26 +28,13 @@ class InputForms:
         opt_menu = OptionMenu(self.master, row_idx=7, col_idx=0)
         self.category = opt_menu.category_value
 
-        # Сохраняем в БД
-        self.btn_saved = tk.Button(
-            self.master, text="Сохранить", command=self.save_data)
-        self.btn_saved.grid(row=8, column=0)
 
     def clear(self):
         self.product_name.delete("0", tk.END)
         self.price.delete("0", tk.END)
 
-    
-    def save_data(self):
+    def getItems(self):
         name = self.product_name.get()
         price = float(self.price.get().replace(',', '.'))
         category = self.category
-
-        Product(self.date, name, category, price).save()
-
-    # def update_data(self):
-    #     name = self.product_name.get()
-    #     price = float(self.price.get().replace(',', '.'))
-    #     quantity = float(self.quantity.get())
-
-    #     Product(self.date, name, category, price).update()
+        return Product(self.date, name, category, price).to_tuple()
