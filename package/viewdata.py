@@ -10,10 +10,12 @@ class ViewData(ttk.Treeview):
         super().__init__(root, **kw)
 
         style = ttk.Style()
-        style.configure("Treeview.Heading", font=(None, 100))
+        style.configure("Treeview.Heading", font=(None, 15))
 
         for named in kw.get('columns'):
             self.heading(named, text=named)
+
+        self.grid(rows=0, column=1)
 
     def render(self, data):
         for val in data:

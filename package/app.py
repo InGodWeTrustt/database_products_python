@@ -5,11 +5,12 @@ from tkinter import messagebox
 from package.product import Product
 from package.inputforms import InputForms
 from package.viewdata import ViewData
-
+from package.database import Database
 
 class App(tk.Tk):
     def __init__(self, path):
         super().__init__()
+        self.config()
         self.database = Database.get_instance().connect(path)
         self.forms = InputForms(self, self.date)
         self.tree = ViewData(self, columns=('id', 'Название товара', 'Цена', 'Категория'))

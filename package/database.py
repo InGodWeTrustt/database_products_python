@@ -37,6 +37,19 @@ class Database:
         self.connection.commit()
         print(f'Продукт "{name}" был успешно добавлен в БД')
 
+    def update(self, id):
+        conn = sqlite3.connect(Product.path_to_db)
+        cursor = conn.cursor()
+
+        cursor.execute(f"""
+            UPDATE products 
+            SET name= ?, category = ?, price = ?
+            WHERE id={id}
+        """, ((self.name, self.category, self.price)))
+
+        conn.commit()
+        conn.close()
+
     def get_all_products(self):
         self.cursor.execute("""SELECT * FROM products""")
         return self.cursor.fetchall()
