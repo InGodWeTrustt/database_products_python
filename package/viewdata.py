@@ -10,7 +10,7 @@ class ViewData(ttk.Treeview):
         super().__init__(root, **kw)
 
         style = ttk.Style()
-        style.configure("Treeview.Heading", font=(None, 15))
+        # style.configure("Treeview.Heading", font=(None, 15))
 
         for named in kw.get('columns'):
             self.heading(named, text=named)
@@ -41,7 +41,14 @@ if __name__ == "__main__":
     tree.heading('id', text="id")
     tree.heading('id2', text="id2")
     tree.insert('', tk.END, values=(1, 4))
+    tree.insert('', tk.END, values=(1, 6))
     tree.pack()
+
+    total = 0;
+    for item in tree.get_children():
+        value = tree.item(item, "values")[1]
+        total += float(value)
+    print(total)
 
     app.mainloop()
 

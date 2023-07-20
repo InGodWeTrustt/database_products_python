@@ -1,19 +1,17 @@
 import tkinter as tk
 from tkinter import ttk
-from datetime import date
 from tkinter import messagebox
 from package.product import Product
 from package.inputforms import InputForms
 from package.viewdata import ViewData
 from package.database import Database
 
-
 class App(tk.Tk):
-    def __init__(self, path):
+    def __init__(self, **kw):
         super().__init__()
-        self.config()
-        self.database = Database.get_instance().connect(path)
-        self.forms = InputForms(self, self.date)
+        self.config(kw)
+        self.database = Database.get_instance().connect(kw.get('path_to_db'))
+        self.forms = InputForms(self, kw.get('date'))
         self.tree = ViewData(self, columns=(
             'id', 'Название товара', 'Цена', 'Категория'))
 
@@ -29,13 +27,16 @@ class App(tk.Tk):
             self.database.destroy()
             self.destroy()
 
-    def config(self):
-        self.title('База данных "Продукты"')  # Устанавливаем заголовок окна
-        self.geometry('1280x720')  # Устанавливаем размер окна
-        self.date = date.today().strftime('%d.%m.%Y')  # Текущая дата
+    def config(self, kw):
+        self.title(kw.get('title'))  # Устанавливаем заголовок окна
+        self.geometry(kw.get('size'))  # Устанавливаем размер окна
         # Зкрытие приложения
         self.protocol("WM_DELETE_WINDOW", lambda e=None: self.close_window(e))
         self.bind('<Escape>', lambda e: self.close_window(e))
+
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(0, weight=3)
+
 
     def save_data(self):
         self.database.add_product(self.forms.getItems())
