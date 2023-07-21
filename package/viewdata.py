@@ -20,14 +20,19 @@ class ViewData(ttk.Treeview):
         #         "Arial", 25))
         # self.finally_price_lbl.grid(column=1, row=7)
 
-    def render(self, data):
-        self.clear_all()
+    def insert_many_elem(self, data):
         for val in data:
             self.insert('', tk.END, values=val)
 
     def clear_all(self):
         for item in self.get_children():
             self.delete(item)
+
+    def insert_one_elem(self, data):
+        # example data = (1, 'Alex', 'Four', 78, 'Male')
+        # Add row to Treeview
+        trv.insert("", 'end', iid=1, values=data)
+
 
 if __name__ == "__main__":
     app = tk.Tk()
@@ -44,7 +49,7 @@ if __name__ == "__main__":
     tree.insert('', tk.END, values=(1, 6))
     tree.pack()
 
-    total = 0;
+    total = 0
     for item in tree.get_children():
         value = tree.item(item, "values")[1]
         total += float(value)

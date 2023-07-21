@@ -6,6 +6,7 @@ from package.inputforms import InputForms
 from package.viewdata import ViewData
 from package.database import Database
 
+
 class App(tk.Tk):
     def __init__(self, **kw):
         super().__init__()
@@ -13,12 +14,15 @@ class App(tk.Tk):
         self.database = Database.get_instance().connect(kw.get('path_to_db'))
         self.forms = InputForms(self, kw.get('date'))
         self.tree = ViewData(self, columns=(
-            'id', 'Название товара', 'Цена', 'Категория'))
+            'id', 'Название товара', 'Цена', 'Категория'), show="headings")
 
         # Сохраняем в БД
         self.btn_saved = tk.Button(
             self.master, text="Сохранить", command=self.save_data)
         self.btn_saved.grid(row=8, column=0)
+
+        # Отрисовываем данные в treeview, если они есть в БД
+        self.load_data_from_db()
 
     def close_window(self, event):
         isExit = messagebox.askokcancel(
@@ -37,9 +41,13 @@ class App(tk.Tk):
         self.columnconfigure(0, weight=1)
         self.columnconfigure(0, weight=3)
 
-
     def save_data(self):
         self.database.add_product(self.forms.getItems())
         products = self.database.get_all_products()
         self.tree.render(products)
         self.forms.clear()
+
+    def load_data_from_db(self):
+        data = self.database.get_all_products()
+        if data:
+            self.tree.insert_many_elem(data)
