@@ -43,11 +43,16 @@ class App(tk.Tk):
 
     def save_data(self):
         self.database.add_product(self.forms.getItems())
-        products = self.database.get_all_products()
-        self.tree.render(products)
+        self.tree.last_id_elem = self.tree.last_id_elem + 1
+        product = self.database.get_product(self.tree.last_id_elem)
+        self.tree.insert_one_elem(product)
         self.forms.clear()
 
     def load_data_from_db(self):
         data = self.database.get_all_products()
         if data:
+            # last elem id
+            last_id_elem = data[-1][0]
+            self.tree.last_id_elem = last_id_elem
+
             self.tree.insert_many_elem(data)

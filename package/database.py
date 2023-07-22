@@ -56,12 +56,16 @@ class Database:
     def destroy(self):
         self.cursor.close()
 
+    def get_product(self, id):
+        # Execute SELECT statement
+        self.cursor.execute("SELECT * FROM products WHERE id=?", (id,))
+        row = self.cursor.fetchone()
+        return row
+
 
 if __name__ == "__main__":
     db = Database.get_instance()
     db.connect(os.path.join(os.getcwd(), 'db', 'products.db'))
-    # db.add_product('a', 500, 'разное', 2)
-    # db.add_product('б', 400, 'другое', 2)
     res = db.get_all_products()
     print(res)
     db.destroy()

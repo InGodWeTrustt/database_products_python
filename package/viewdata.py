@@ -8,7 +8,7 @@ class ViewData(ttk.Treeview):
 
     def __init__(self, root, **kw):
         super().__init__(root, **kw)
-
+        self._last_id_elem = 0
         style = ttk.Style()
         # style.configure("Treeview.Heading", font=(None, 15))
 
@@ -29,10 +29,15 @@ class ViewData(ttk.Treeview):
             self.delete(item)
 
     def insert_one_elem(self, data):
-        # example data = (1, 'Alex', 'Four', 78, 'Male')
-        # Add row to Treeview
-        trv.insert("", 'end', iid=1, values=data)
+        self.insert("", tk.END, values=data)
 
+    @property
+    def last_id_elem(self):
+        return self._last_id_elem
+
+    @last_id_elem.setter
+    def last_id_elem(self, id):
+        self._last_id_elem = id
 
 if __name__ == "__main__":
     app = tk.Tk()
