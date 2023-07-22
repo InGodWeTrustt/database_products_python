@@ -5,7 +5,7 @@ from package.product import Product
 from package.inputforms import InputForms
 from package.viewdata import ViewData
 from package.database import Database
-
+from package.scrollbar import Scrollbar
 
 class App(tk.Tk):
     def __init__(self, **kw):
@@ -15,6 +15,7 @@ class App(tk.Tk):
         self.forms = InputForms(self, kw.get('date'))
         self.tree = ViewData(self, columns=(
             'id', 'Название товара', 'Цена', 'Категория'), show="headings")
+        self.scrollbar = Scrollbar(self, self.tree, orient=tk.VERTICAL, command=self.tree.yview)
 
         # Сохраняем в БД
         self.btn_saved = tk.Button(
