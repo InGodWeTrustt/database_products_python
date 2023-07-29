@@ -25,6 +25,8 @@ class App(tk.Tk):
         # Отрисовываем данные в treeview, если они есть в БД
         self.load_data_from_db()
 
+        self.enter_leave_events()
+
     def close_window(self, event):
         isExit = messagebox.askokcancel(
             'Выйти', 'Вы действительно хотите выйти из приложения?')
@@ -57,3 +59,13 @@ class App(tk.Tk):
             self.tree.last_id_elem = last_id_elem
 
             self.tree.insert_many_elem(data)
+        
+    def enter_leave_events(self):
+        self.btn_saved.bind('<Enter>', self.on_enter)
+        self.btn_saved.bind('<Leave>', self.on_leave)
+    
+    def on_enter(self, event):
+        event.widget.config(bg="blue", fg="white")
+    
+    def on_leave(self, event):
+        event.widget.config(bg='SystemButtonFace', fg='black')
