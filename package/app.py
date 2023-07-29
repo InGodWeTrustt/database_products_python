@@ -7,6 +7,7 @@ from package.viewdata import ViewData
 from package.database import Database
 from package.scrollbar import Scrollbar
 
+
 class App(tk.Tk):
     def __init__(self, **kw):
         super().__init__()
@@ -14,8 +15,9 @@ class App(tk.Tk):
         self.database = Database.get_instance().connect(kw.get('path_to_db'))
         self.forms = InputForms(self, kw.get('date'))
         self.tree = ViewData(self, columns=(
-            'id', 'Название товара', 'Цена', 'Категория'), show="headings")
-        self.scrollbar = Scrollbar(self, self.tree, orient=tk.VERTICAL, command=self.tree.yview)
+            'id', "Дата",  'Название товара', 'Цена', 'Категория'), show="headings")
+        self.scrollbar = Scrollbar(
+            self, self.tree, orient=tk.VERTICAL, command=self.tree.yview)
 
         # Сохраняем в БД
         self.btn_saved = tk.Button(
@@ -25,7 +27,23 @@ class App(tk.Tk):
         # Отрисовываем данные в treeview, если они есть в БД
         self.load_data_from_db()
 
+        # обработка события при наведении / потери фокуса на кнопку "Сохранить"
         self.enter_leave_events()
+
+        #  Отображение итоговой суммы
+        self._finally_price = 0
+        self.finally_price_lbl = tk.Label(self, text=f"Итоговая сумма: {str(self.finally_price)} р.", font=(
+            "Arial", 25))
+        self.finally_price_lbl.grid(column=1, row=2)
+        self.update_text_finally_price()
+
+    @property
+    def finally_price(self):
+        return self._finally_price
+
+    @finally_price.setter
+    def finally_price(self, new_value):
+        self._finally_price = new_value
 
     def close_window(self, event):
         isExit = messagebox.askokcancel(
@@ -50,6 +68,7 @@ class App(tk.Tk):
         product = self.database.get_product(self.tree.last_id_elem)
         self.tree.insert_one_elem(product)
         self.forms.clear()
+        self.update_text_finally_price()
 
     def load_data_from_db(self):
         data = self.database.get_all_products()
@@ -59,13 +78,25 @@ class App(tk.Tk):
             self.tree.last_id_elem = last_id_elem
 
             self.tree.insert_many_elem(data)
-        
+
     def enter_leave_events(self):
         self.btn_saved.bind('<Enter>', self.on_enter)
         self.btn_saved.bind('<Leave>', self.on_leave)
-    
+
     def on_enter(self, event):
         event.widget.config(bg="blue", fg="white")
-    
+
     def on_leave(self, event):
         event.widget.config(bg='SystemButtonFace', fg='black')
+
+    def calc_finally_price(self):
+        total_sum = 0
+        for item in self.tree.get_children():
+            value = self.tree.item(item)['values'][3]
+            total_sum += float(value)
+        return total_sum
+
+    def update_text_finally_price(self):
+        self._finally_price = self.calc_finally_price()
+        self.finally_price_lbl.config(
+            text=f"Итоговая сумма: {str(self.finally_price)} р.")

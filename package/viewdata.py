@@ -10,15 +10,11 @@ class ViewData(ttk.Treeview):
         super().__init__(root, **kw)
         self._last_id_elem = 0
         style = ttk.Style()
-        # style.configure("Treeview.Heading", font=(None, 15))
 
         for named in kw.get('columns'):
             self.heading(named, text=named)
 
         self.grid(row=0, column=1)
-        # self.finally_price_lbl = tk.Label(root, text=f"Итоговая сумма: {str(finally_price)} р.", font=(
-        #         "Arial", 25))
-        # self.finally_price_lbl.grid(column=1, row=7)
 
     def insert_many_elem(self, data):
         for val in data:

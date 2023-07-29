@@ -12,7 +12,7 @@ class Product:
 
     def to_tuple(self):
         res = []
-        items = ['date', 'name', 'category', 'price']
+        items = ['date', 'name', 'price', 'category']
         for attr in items:
             res.append(getattr(self, attr))
         return tuple(res)
