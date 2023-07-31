@@ -19,7 +19,7 @@ class App(tk.Tk):
         self.scrollbar = Scrollbar(
             self, self.tree, orient=tk.VERTICAL, command=self.tree.yview)
 
-        # Сохраняем в БД
+        # Сохраняем товар в БД
         self.btn_saved = tk.Button(
             self.master, text="Сохранить", command=self.save_data)
         self.btn_saved.grid(row=8, column=0)
@@ -35,6 +35,8 @@ class App(tk.Tk):
         self.finally_price_lbl = tk.Label(self, text=f"Итоговая сумма: {str(self.finally_price)} р.", font=(
             "Arial", 25))
         self.finally_price_lbl.grid(column=1, row=2)
+
+        # Обновление итоговой суммы
         self.update_text_finally_price()
 
     @property
@@ -46,6 +48,7 @@ class App(tk.Tk):
         self._finally_price = new_value
 
     def close_window(self, event):
+        """Закрытие основного окна приложения"""
         isExit = messagebox.askokcancel(
             'Выйти', 'Вы действительно хотите выйти из приложения?')
         if isExit:
@@ -65,9 +68,13 @@ class App(tk.Tk):
     def save_data(self):
         self.database.add_product(self.forms.getItems())
         self.tree.last_id_elem = self.tree.last_id_elem + 1
+        # получаем продукт из базы данных
         product = self.database.get_product(self.tree.last_id_elem)
+        # отображаем продукт в treeview
         self.tree.insert_one_elem(product)
+        # очищаем поля ввода данных
         self.forms.clear()
+        # обновляем итоговую стоимость всех товаров
         self.update_text_finally_price()
 
     def load_data_from_db(self):
@@ -76,7 +83,6 @@ class App(tk.Tk):
             # last elem id
             last_id_elem = data[-1][0]
             self.tree.last_id_elem = last_id_elem
-
             self.tree.insert_many_elem(data)
 
     def enter_leave_events(self):
@@ -90,6 +96,7 @@ class App(tk.Tk):
         event.widget.config(bg='SystemButtonFace', fg='black')
 
     def calc_finally_price(self):
+        """ Расчет итоговой стоимости всех товаров в БД"""
         total_sum = 0
         for item in self.tree.get_children():
             value = self.tree.item(item)['values'][3]
