@@ -90,6 +90,7 @@ class App(tk.Tk):
         self.btn_saved.bind('<Leave>', self.on_leave)
 
     def on_enter(self, event):
+        """ Функция вызывается, когда курсор мыши наводится на виджет"""
         event.widget.config(bg="blue", fg="white")
 
     def on_leave(self, event):
@@ -104,6 +105,7 @@ class App(tk.Tk):
         return total_sum
 
     def update_text_finally_price(self):
+        """ Обновляем итоговую цену в метке"""
         self._finally_price = self.calc_finally_price()
         self.finally_price_lbl.config(
             text=f"Итоговая сумма: {str(self.finally_price)} р.")
