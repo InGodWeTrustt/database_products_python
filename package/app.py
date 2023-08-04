@@ -33,7 +33,7 @@ class App(tk.Tk):
         #  Отображение итоговой суммы
         self._finally_price = 0
         self.finally_price_lbl = tk.Label(self, text=f"Итоговая сумма: {str(self.finally_price)} р.", font=(
-            "Arial", 25))
+            "Arial", 20))
         self.finally_price_lbl.grid(column=1, row=2)
 
         # Обновление итоговой суммы
