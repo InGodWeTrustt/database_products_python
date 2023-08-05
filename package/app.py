@@ -61,6 +61,7 @@ class App(tk.Tk):
 
         self.title(kw.get('title'))  # Устанавливаем заголовок окна
         self.geometry(kw.get('size'))  # Устанавливаем размер окна
+        
         # Зкрытие приложения
         self.protocol("WM_DELETE_WINDOW", lambda e=None: self.close_window(e))
         self.bind('<Escape>', lambda e: self.close_window(e))
@@ -102,6 +103,8 @@ class App(tk.Tk):
         event.widget.config(bg="blue", fg="white")
 
     def on_leave(self, event):
+        """ Функция вызывается, когда курсор мыши покидает виджет"""
+
         event.widget.config(bg='SystemButtonFace', fg='black')
 
     def calc_finally_price(self):
