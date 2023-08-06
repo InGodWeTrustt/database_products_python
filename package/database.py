@@ -21,6 +21,8 @@ class Database:
         return self
 
     def create_start_table(self):
+        """ Создаем первоначальную таблицу, если она не создана """
+
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS products (
                 id INTEGER PRIMARY KEY,
@@ -31,6 +33,10 @@ class Database:
 );""")
 
     def add_product(self, product):
+        """ 
+        Добавляем продукт в базу данных
+        product - это кортеж (date, name, price, category)
+        """
         self.cursor.execute("""
             INSERT INTO products (date, name, price, category)
             VALUES (?, ?, ?, ?)
@@ -40,6 +46,8 @@ class Database:
         print(f'Продукт "{product[1]}" был успешно добавлен в БД')
 
     def update(self, id, product):
+        """ Обновляем продукт по id """
+
         self.cursor.execute(f"""
             UPDATE products 
             SET date = ? , name= ?, category = ?, price = ?
@@ -50,14 +58,18 @@ class Database:
         self.cursor.close()
 
     def get_all_products(self):
+        """ Получаем список всех товаров из БД """
+
         self.cursor.execute("""SELECT * FROM products""")
         return self.cursor.fetchall()
 
     def destroy(self):
+        """ Закрываем соединение с БД"""
         self.cursor.close()
 
     def get_product(self, id):
-        # Execute SELECT statement
+        """ Получаем продукт по id """
+        
         self.cursor.execute("SELECT * FROM products WHERE id=?", (id,))
         row = self.cursor.fetchone()
         return row
