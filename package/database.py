@@ -15,6 +15,8 @@ class Database:
         return Database._instance
 
     def connect(self, db_file):
+        """ Подключаемся к БД """
+        
         self.connection = sqlite3.connect(db_file)
         self.cursor = self.connection.cursor()
         self.create_start_table()
