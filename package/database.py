@@ -67,6 +67,7 @@ class Database:
 
     def destroy(self):
         """ Закрываем соединение с БД"""
+        
         self.cursor.close()
 
     def get_product(self, id):
